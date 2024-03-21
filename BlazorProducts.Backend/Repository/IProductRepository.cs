@@ -8,5 +8,8 @@ namespace BlazorProducts.Backend.Repository
     {
         Task<PagedList<Product>> GetProducts(ProductParameters productParameters);
         Task CreateProduct(Product product);
+        Task<Product> GetProduct(Guid id);
+
+        Task UpdateProduct(Product product, Product dbProduct);
     }
 }

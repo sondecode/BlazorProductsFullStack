@@ -28,5 +28,17 @@ namespace BlazorProducts.Backend.Repository
             _context.Add(product);
             await _context.SaveChangesAsync();
         }
+        public async Task<Product> GetProduct(Guid id) =>
+            await _context.Products.FirstOrDefaultAsync(p => p.Id.Equals(id));
+
+        public async Task UpdateProduct(Product product, Product dbProduct)
+        {
+            dbProduct.Name = product.Name;
+            dbProduct.Price = product.Price;
+            dbProduct.ImageUrl = product.ImageUrl;
+            dbProduct.Supplier = product.Supplier;
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

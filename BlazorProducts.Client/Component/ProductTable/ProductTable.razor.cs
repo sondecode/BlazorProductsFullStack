@@ -7,5 +7,13 @@ namespace BlazorProducts.Client.Component.ProductTable
     {
         [Parameter]
         public List<Product> Products { get; set; }
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
+        private void RedirectToUpdate(Guid id)
+        {
+            var url = Path.Combine("/updateProduct/", id.ToString());
+            NavigationManager.NavigateTo(url);
+        }
     }
 }
