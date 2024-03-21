@@ -30,5 +30,13 @@ namespace BlazorProducts.Client.Pages
 			ProductList = pagingResponse.Items;
 			MetaData = pagingResponse.MetaData;
 		}
+
+		private async Task SearchChanged(string searchTerm)
+		{
+			Console.WriteLine(searchTerm);
+			_productParameters.PageNumber = 1;
+			_productParameters.SearchTerm = searchTerm;
+			await GetProducts();
+		}
 	}
 }

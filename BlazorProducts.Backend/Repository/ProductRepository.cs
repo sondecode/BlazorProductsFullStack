@@ -15,7 +15,10 @@ namespace BlazorProducts.Backend.Repository
         }
         public async Task<PagedList<Product>> GetProducts(ProductParameters productParameters)
         {
-            var products = await _context.Products.ToListAsync();
+            var products = await _context.Products
+                .Search(productParameters.SearchTerm)
+                .ToListAsync();
+
             return PagedList<Product>
                 .ToPagedList(products, productParameters.PageNumber, productParameters.PageSize);
         }
