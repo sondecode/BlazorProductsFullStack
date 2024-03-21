@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using BlazorProducts.Client.Features;
 using Entities.Models;
 using Entities.RequestFeatures;
@@ -36,6 +37,17 @@ namespace BlazorProducts.Client.HttpRepository
                 MetaData = JsonSerializer.Deserialize<MetaData>(response.Headers.GetValues("X-Pagination").First(), _options)
             };
             return pagingResponse;
+        }
+
+        public async Task CreateProduct(Product product)
+        {
+            var content = JsonSerializer.Serialize(product);
+            var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+
+            var postResult = await _client.PostAsync("products", bodyContent);
+            var postContent = await postResult.Content.ReadAsStringAsync();
+
+            if (!postResult.IsSuccessStatusCode) { throw new ApplicationException(postContent); }
         }
     }
 }
