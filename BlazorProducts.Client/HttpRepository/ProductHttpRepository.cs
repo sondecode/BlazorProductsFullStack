@@ -49,5 +49,19 @@ namespace BlazorProducts.Client.HttpRepository
 
             if (!postResult.IsSuccessStatusCode) { throw new ApplicationException(postContent); }
         }
+        public async Task<string> UploadProductImage(MultipartFormDataContent content)
+        {
+            var postResult = await _client.PostAsync("https://localhost:7214/upload", content);
+            var postContent = await postResult.Content.ReadAsStringAsync();
+            if (!postResult.IsSuccessStatusCode)
+            {
+                throw new ApplicationException(postContent);
+            }
+            else
+            {
+                var imgUrl = Path.Combine("https://localhost:7214/", postContent);
+                return imgUrl;
+            }
+        }
     }
 }

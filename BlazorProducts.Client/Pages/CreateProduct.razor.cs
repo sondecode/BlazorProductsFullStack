@@ -9,6 +9,7 @@ namespace BlazorProducts.Client.Pages
 	{
 
         private SuccessNotification _notification;
+        private void AssignImageUrl(string imgUrl) => _product.ImageUrl = imgUrl;
         private Product _product = new Product
 		{
 			Id = Guid.NewGuid(),

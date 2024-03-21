@@ -9,5 +9,6 @@ namespace BlazorProducts.Client.HttpRepository
     {
         Task<PagingResponse<Product>> GetProducts(ProductParameters productParameters);
         Task CreateProduct(Product product);
-	}
+        Task<string> UploadProductImage(MultipartFormDataContent content);
+    }
 }
