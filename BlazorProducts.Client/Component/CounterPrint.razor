@@ -1,0 +1,36 @@
+﻿
+<h1>@Title</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public int currentCount { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine($"OnInit => Title: {Title}, CurrentCount: {currentCount}");
+    }
+
+    protected override void OnParametersSet()
+    {
+        Console.WriteLine($"OnParameterSet  => Title: {Title},  CurrentCount: {currentCount}");
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Console.WriteLine("This is the first render of the component");
+        }
+    }
+
+    protected override bool ShouldRender()
+    {
+        return true;
+    }
+}
