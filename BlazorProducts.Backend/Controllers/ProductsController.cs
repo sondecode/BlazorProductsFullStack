@@ -56,5 +56,19 @@ namespace BlazorProducts.Backend.Controllers
             await _repo.UpdateProduct(product, dbProduct);
             return NoContent();
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(Guid id)
+        {
+            //additional product and model validation checks
+
+            var dbProduct = await _repo.GetProduct(id);
+            if (dbProduct == null)
+            {
+                return NotFound();
+            }
+            await _repo.DeleteProduct(dbProduct);
+           
+            return NoContent();
+        }
     }
 }

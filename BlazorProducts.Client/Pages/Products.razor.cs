@@ -45,5 +45,12 @@ namespace BlazorProducts.Client.Pages
 			_productParameters.OrderBy = orderBy;
 			await GetProducts();
 		}
-	}
+
+        private async Task DeleteProduct(Guid id)
+        {
+			await ProductRepo.DeleteProduct(id.ToString());
+			_productParameters.PageNumber = 1;
+            await GetProducts();
+        }
+    }
 }

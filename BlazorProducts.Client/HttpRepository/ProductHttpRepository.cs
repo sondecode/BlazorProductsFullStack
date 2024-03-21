@@ -91,5 +91,15 @@ namespace BlazorProducts.Client.HttpRepository
                 throw new ApplicationException(putContent);
             }
         }
+        public async Task DeleteProduct(string id)
+        {
+            var url = Path.Combine("products", id);
+            var response = await _client.DeleteAsync(url);
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApplicationException(content);
+            }
+        }
     }
 }

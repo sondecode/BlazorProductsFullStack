@@ -12,5 +12,6 @@ namespace BlazorProducts.Client.HttpRepository
         Task<string> UploadProductImage(MultipartFormDataContent content);
         Task<Product> GetProduct(string id);
         Task UpdateProduct(Product product);
+        Task DeleteProduct(string id);
     }
 }

@@ -2,6 +2,7 @@
 using BlazorProducts.Server.Context;
 using Entities.Models;
 using Entities.RequestFeatures;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazorProducts.Backend.Repository
@@ -38,6 +39,10 @@ namespace BlazorProducts.Backend.Repository
             dbProduct.ImageUrl = product.ImageUrl;
             dbProduct.Supplier = product.Supplier;
 
+            await _context.SaveChangesAsync();
+        }
+        public async Task DeleteProduct(Product product) {
+            _context.Remove(product);
             await _context.SaveChangesAsync();
         }
     }

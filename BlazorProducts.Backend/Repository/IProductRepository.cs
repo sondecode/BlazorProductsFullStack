@@ -11,5 +11,6 @@ namespace BlazorProducts.Backend.Repository
         Task<Product> GetProduct(Guid id);
 
         Task UpdateProduct(Product product, Product dbProduct);
+        Task DeleteProduct(Product dbProduct);
     }
 }
