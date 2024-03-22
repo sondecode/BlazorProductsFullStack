@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlazorProducts.Backend.Context.Configuration;
 
 namespace BlazorProducts.Server.Context
 {
@@ -21,6 +22,7 @@ namespace BlazorProducts.Server.Context
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
         }
 
         public DbSet<Product> Products { get; set; }
