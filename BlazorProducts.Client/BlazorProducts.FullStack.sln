@@ -5,8 +5,6 @@ VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorProducts.Client", "BlazorProducts.Client.csproj", "{1B04BB88-434C-4CF1-87DB-F461BA56023F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorProducts.Backend", "..\BlazorProducts.Backend\BlazorProducts.Backend.csproj", "{A6ADADD6-1A5C-47D7-9699-99B377216005}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "..\Entities\Entities.csproj", "{C3D230B5-5A64-47C0-AFA0-53B84C5EA947}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{1B04BB88-434C-4CF1-87DB-F461BA56023F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B04BB88-434C-4CF1-87DB-F461BA56023F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B04BB88-434C-4CF1-87DB-F461BA56023F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A6ADADD6-1A5C-47D7-9699-99B377216005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A6ADADD6-1A5C-47D7-9699-99B377216005}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A6ADADD6-1A5C-47D7-9699-99B377216005}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A6ADADD6-1A5C-47D7-9699-99B377216005}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C3D230B5-5A64-47C0-AFA0-53B84C5EA947}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C3D230B5-5A64-47C0-AFA0-53B84C5EA947}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3D230B5-5A64-47C0-AFA0-53B84C5EA947}.Release|Any CPU.ActiveCfg = Release|Any CPU

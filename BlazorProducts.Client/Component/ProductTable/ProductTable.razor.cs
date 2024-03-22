@@ -25,7 +25,7 @@ namespace BlazorProducts.Client.Component.ProductTable
             var confirmed = await Js.InvokeAsync<bool>("confirm", $"Are you sure to delete {product.Name}?");
             if (confirmed)
             {
-                OnDeleted.InvokeAsync(id);
+                await OnDeleted.InvokeAsync(id);
             }
         }
     }
