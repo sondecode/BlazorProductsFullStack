@@ -1,0 +1,27 @@
+﻿@page "/createOrder"
+
+<h3>Create Order</h3>
+<form @onsubmit="CreateOrderForm">
+    <div class="mb-5">
+        <label for="customerName">Customer Name</label>
+        <input id="customerName" class="form-control" @bind="Order.CustomerName" />
+    </div>
+    <div class="mb-5">
+        <label for="orderDate">Order Date</label>
+        <input id="orderDate" type="date" class="form-control" @bind="Order.OrderDate" />
+    </div>
+    <!-- Add more form fields for order details -->
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<Products></Products>
+
+@code {
+    private OrderForCreatingDto Order { get; set; } = new OrderForCreatingDto();
+    private bool IsSubmitted { get; set; }
+
+    private async Task CreateOrderForm()
+    {
+        //await OrderRepository.CreateOrder(Order);
+        IsSubmitted = true;
+    }
+}
