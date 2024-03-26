@@ -27,6 +27,17 @@ namespace BlazorProducts.Client.HttpRepository
             }
             var Items = JsonSerializer.Deserialize<List<Order>>(content, _options);
             return Items;
-        }  
+        }
+
+        public async Task CreateOrder(OrderForCreatingDto order)
+        {
+            var content = JsonSerializer.Serialize(order);
+            var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+
+            var postResult = await _client.PostAsync("orders", bodyContent);
+            var postContent = await postResult.Content.ReadAsStringAsync();
+
+            if (!postResult.IsSuccessStatusCode) { throw new ApplicationException(postContent); }
+        }
     }
 }

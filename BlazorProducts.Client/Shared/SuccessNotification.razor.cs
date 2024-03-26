@@ -25,7 +25,7 @@ namespace BlazorProducts.Client.Shared
             _modalClass = "";
             _showBackdrop = false;
             StateHasChanged();
-            Navigation.NavigateTo("/products");
+            Navigation.NavigateTo(Navigation.Uri.Substring(0, Navigation.Uri.LastIndexOf('/')));
         }
     }
 }

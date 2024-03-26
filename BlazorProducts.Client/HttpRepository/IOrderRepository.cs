@@ -8,5 +8,6 @@ namespace BlazorProducts.Client.HttpRepository
     public interface IOrderRepository
     {
         Task<List<Order>> GetOrders();
+        Task CreateOrder(OrderForCreatingDto order);
     }
 }

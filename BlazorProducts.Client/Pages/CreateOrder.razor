@@ -1,6 +1,13 @@
-﻿@page "/createOrder"
+﻿@page "/orders/createOrder"
+@using BlazorProducts.Client.Component
+@using BlazorProducts.Client.HttpRepository
+@using BlazorProducts.Client.Shared
+@using Entities.DTO
+@using Entities.Models
+@using Entities.RequestFeatures
 
 <h3>Create Order</h3>
+<SuccessNotification @ref="_notification" />
 <form @onsubmit="CreateOrderForm">
     <div class="mb-5">
         <label for="customerName">Customer Name</label>
@@ -10,18 +17,57 @@
         <label for="orderDate">Order Date</label>
         <input id="orderDate" type="date" class="form-control" @bind="Order.OrderDate" />
     </div>
+    <div class="mb-5 dropdown">
+        <label for="orderDate">Adding Products</label>
+        <Search OnSearchChanged="SearchChanged" />
+        <div class="dropdown-menu" style="display: @(ShowDropdown ? "block" : "none")">
+            @if (SearchProductList != null && SearchProductList.Any())
+            {
+                @foreach (var product in SearchProductList)
+                {
+                    <div class="dropdown-item" @onclick="() => SelectProduct(product)">
+                        <img src="@product.ImageUrl" alt="Product Image" class="mr-2" style="width: 50px; height: 50px;" />
+                        <div>
+                            <div>@product.Name</div>
+                            <div>@product.Price.ToString("C")</div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <button class="dropdown-item disabled">No results found</button>
+            }
+        </div>
+    </div>
     <!-- Add more form fields for order details -->
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-<Products></Products>
-
-@code {
-    private OrderForCreatingDto Order { get; set; } = new OrderForCreatingDto();
-    private bool IsSubmitted { get; set; }
-
-    private async Task CreateOrderForm()
-    {
-        //await OrderRepository.CreateOrder(Order);
-        IsSubmitted = true;
-    }
-}
+<!-- ShoppingCartComponent.razor -->
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ShoppingCart)
+            {
+                <tr>
+                    <td><img src="@item.ImageUrl" alt="@item.Name" width="50" /></td>
+                    <td>@item.Name</td>
+                    <td>@item.Price</td>
+                    <td><input type="number" class="form-control" @bind="item.Quantity" @oninput="() => UpdateQuantity(item)" /></td>
+                    <td>@(item.Price * item.Quantity)</td>
+                    <td><button class="btn btn-danger" @onclick="() => RemoveFromCart(item)">Remove</button></td> <!-- Remove button -->
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

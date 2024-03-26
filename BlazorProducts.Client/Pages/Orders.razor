@@ -5,8 +5,14 @@
 @using Microsoft.AspNetCore.Authorization
 
 <div class="row">
+    <div class="col-md-5">
+        <Search OnSearchChanged="() => {}" />
+    </div>
+    <div class="col-md-5">
+        <Sort OnSortChanged="() => {}" />
+    </div>
     <div class="col-md-2">
-        <a href="/createOrder">Create Order</a>
+        <a href="/orders/createOrder">Create Order</a>
     </div>
 </div>
 <div class="row">
@@ -18,6 +24,7 @@
                 <th>Products</th>
                 <th>Order Date</th>
                 <th>Total</th>
+                <th>Action</th>
                 <!-- Add more table headers as needed -->
             </tr>
         </thead>
@@ -57,6 +64,7 @@
                     </td>
                     <td>@order.OrderDate.ToShortDateString()</td>
                     <td>@order.OrderTotal</td>
+                    <td><button class="btn btn-danger" @onclick="() =>{}">Remove</button> <button class="btn btn-success" @onclick="() =>{}">Update</button></td>
                     <!-- Add more table cells for additional order details -->
                 </tr>
             }
