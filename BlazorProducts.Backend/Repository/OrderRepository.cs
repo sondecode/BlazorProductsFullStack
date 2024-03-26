@@ -52,6 +52,16 @@ namespace BlazorProducts.Backend.Repository
             _context.Add(NewOrder);
             await _context.SaveChangesAsync();
         }
+        public async Task UpdateStatus(Guid orderId, OrderStatus status)
+        {
+            var item = await _context.Orders.FindAsync(orderId);
+            if (item == null)
+            {
+                throw new ArgumentException("Invalid order input");
+            }
+            item.Status = status;
+            await _context.SaveChangesAsync();
+        }
 
     }
 }

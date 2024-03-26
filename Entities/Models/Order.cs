@@ -21,6 +21,7 @@ namespace Entities.Models
         [Range(0, double.MaxValue, ErrorMessage = "Order total must be a positive number")]
         public double OrderTotal { get; set; }
 
+        public OrderStatus Status { get; set; }
         public ICollection<OrderProduct> OrderProducts { get; set; } // Represents the products in the order
     }
 }

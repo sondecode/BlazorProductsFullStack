@@ -8,10 +8,10 @@ namespace Entities.Models
 {
     public enum OrderStatus
     {
-        Pending,
-        Processing,
-        Shipped,
-        Delivered,
-        Cancelled
+        Pending = 0,
+        Processing = 1,
+        Shipped = 2,
+        Delivered = 3,
+        Cancelled = 4
     }
 }

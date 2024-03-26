@@ -9,5 +9,6 @@ namespace BlazorProducts.Client.HttpRepository
     {
         Task<List<Order>> GetOrders();
         Task CreateOrder(OrderForCreatingDto order);
+        Task UpdateStatus(Guid orderId, int status);
     }
 }

@@ -8,5 +8,6 @@ namespace BlazorProducts.Backend.Repository
     {
         Task<IEnumerable<Order>> GetOrders();
         Task CreateOrder(OrderForCreatingDto order);
+        Task UpdateStatus(Guid orderId, OrderStatus status);
     }
 }

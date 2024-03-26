@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 using BlazorProducts.Client.Features;
+using BlazorProducts.Client.Pages;
 using Entities.Models;
 using Entities.RequestFeatures;
 using Microsoft.AspNetCore.WebUtilities;
@@ -38,6 +39,16 @@ namespace BlazorProducts.Client.HttpRepository
             var postContent = await postResult.Content.ReadAsStringAsync();
 
             if (!postResult.IsSuccessStatusCode) { throw new ApplicationException(postContent); }
+        }
+        public async Task UpdateStatus(Guid orderId, int status)
+        {
+            var uri = $"orders/{orderId}/changestatus/{status}";
+            var response = await _client.GetAsync(uri);
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApplicationException(content);
+            }
         }
     }
 }

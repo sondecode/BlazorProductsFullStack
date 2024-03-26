@@ -2,6 +2,7 @@
 @attribute [Authorize(Roles = "Administrator")]
 @using BlazorProducts.Client.Component
 @using BlazorProducts.Client.Component.ProductTable
+@using Entities.Models
 @using Microsoft.AspNetCore.Authorization
 
 <div class="row">
@@ -24,7 +25,8 @@
                 <th>Products</th>
                 <th>Order Date</th>
                 <th>Total</th>
-                <th>Action</th>
+                <th>Status</th>
+                <th>Actions</th>
                 <!-- Add more table headers as needed -->
             </tr>
         </thead>
@@ -64,7 +66,15 @@
                     </td>
                     <td>@order.OrderDate.ToShortDateString()</td>
                     <td>@order.OrderTotal</td>
-                    <td><button class="btn btn-danger" @onclick="() =>{}">Remove</button> <button class="btn btn-success" @onclick="() =>{}">Update</button></td>
+                    <td>@order.Status</td>
+                    <td>
+                        <select id="orderStatus" class="mb-5" @onchange="(e) => UpdateOrderStatus(order,  (int)Enum.Parse<OrderStatus>(e.Value.ToString()))">
+                            @foreach (OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
+                            {
+                                <option value="@status">@status</option>
+                            }
+                        </select>
+                    </td>
                     <!-- Add more table cells for additional order details -->
                 </tr>
             }

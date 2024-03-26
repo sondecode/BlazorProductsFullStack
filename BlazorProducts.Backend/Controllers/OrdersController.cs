@@ -32,6 +32,12 @@ namespace BlazorProducts.Backend.Controllers
             await _repo.CreateOrder(orderForCreating);
             return Created("", orderForCreating);
         }
+        [HttpGet("{orderId}/ChangeStatus/{status}")]
+        public async Task<IActionResult> UpdateStatus(Guid orderId, OrderStatus status)
+        {
+            await _repo.UpdateStatus(orderId, status);
+            return Ok();
+        }
 
     }
 }
