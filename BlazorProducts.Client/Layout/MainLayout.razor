@@ -1,22 +1,30 @@
 ﻿@using BlazorProducts.Client.Component
 @inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <AuthLinks />
-        </div>
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+    <MudLayout>
+        <MudAppBar>
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        My Application
+        <MudSpacer />
+        <AuthLinks/>
+    </MudAppBar>
+   <MudDrawer @bind-Open="@_drawerOpen">
+        <NavMenu/>
+    </MudDrawer>
+    <MudMainContent>
 
-        <article class="content px-4">
-            <CascadingValue Value="@_color">
                 @Body
-            </CascadingValue>
-        </article>
-    </main>
-</div>
+        </MudMainContent>
+    </MudLayout>
+
 @code {
-    private readonly string _color = "#0505b5";
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
 }

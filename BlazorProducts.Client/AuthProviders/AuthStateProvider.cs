@@ -27,9 +27,12 @@ namespace BlazorProducts.Client.AuthProviders
 
             //Check the exp filed of the token
             var expriry = claims.Where(claim => claim.Type.Equals("exp")).FirstOrDefault();
-            if (expriry != null)
+            if (expriry != null && DateTimeOffset.FromUnixTimeSeconds(long.Parse(expriry.Value)) < DateTime.Now)
+            {
+                await _localStorage.RemoveItemAsync("authToken");
                 return _anonymous;
-
+            }
+        
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims, "jwtAuthType"))));
         }
@@ -39,11 +42,15 @@ namespace BlazorProducts.Client.AuthProviders
             var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(claims, "jwtAuthType"));
             var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
             NotifyAuthenticationStateChanged(authState);
+
+            _localStorage.SetItemAsync("authToken", token);
         }
         public void NotifyUserLogout()
         {
             var authState = Task.FromResult(_anonymous);
             NotifyAuthenticationStateChanged(authState);
+
+            _localStorage.RemoveItemAsync("authToken");
         }
 
     }

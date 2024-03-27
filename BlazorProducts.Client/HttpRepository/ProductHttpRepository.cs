@@ -21,6 +21,7 @@ namespace BlazorProducts.Client.HttpRepository
         {
             var queryStringParam = new Dictionary<string, string>
             {
+                ["pageSize"] = productParameters.PageSize.ToString(),
                 ["pageNumber"] = productParameters.PageNumber.ToString(),
                 ["searchTerm"] = productParameters.SearchTerm == null ? "" : productParameters.SearchTerm,
                 ["orderBy"] = productParameters.OrderBy

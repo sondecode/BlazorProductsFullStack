@@ -2,10 +2,10 @@
 <AuthorizeView>
     <Authorized>
         Hello, @context.User.Identity.Name!
-        <a href="Logout">Log out</a>
+        <MudLink Color="@Color.Default" Href="/Logout" Match="NavLinkMatch.Prefix">Log out</MudLink>
     </Authorized>
     <NotAuthorized>
-        <a href="Registration">Register</a>
-        <a href="Login">Log in</a>
+        <MudLink Color="@Color.Default" Href="/Registration" Match="NavLinkMatch.Prefix">Register </MudLink>
+        <MudLink Color="@Color.Default" Href="/Login" Match="NavLinkMatch.Prefix">Log in</MudLink>
     </NotAuthorized>
 </AuthorizeView>
