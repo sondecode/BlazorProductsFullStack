@@ -1,5 +1,4 @@
 ﻿@page "/login"
-<h3>Login</h3>
 
 @if (ShowAuthError)
 {
@@ -8,27 +7,21 @@
     </div>
 }
 
-<EditForm Model="_userForAuthentication" OnValidSubmit="ExecuteLogin" class="card card-body bg-light mt-5">
+<EditForm Model="_userForAuthentication" OnValidSubmit="ExecuteLogin">
     <DataAnnotationsValidator />
-    <div class="mb-5 row">
-        <label for="email" class="col-md-2 col-form-label">Email:</label>
-        <div class="col-md-10">
-            <InputText id="email" class="form-control" @bind-Value="_userForAuthentication.Email" />
-            <ValidationMessage For="@(() => _userForAuthentication.Email)" />
-        </div>
-    </div>
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="Email" Class="mt-3"
+                          @bind-Value="_userForAuthentication.Email" For="@(() => _userForAuthentication.Email)" />
 
-    <div class="mb-5 row">
-        <label for="password" class="col-md-2 col-form-label">Password:</label>
-        <div class="col-md-10">
-            <InputText type="password" id="password" class="form-control" @bind-Value="_userForAuthentication.Password" />
-            <ValidationMessage For="@(() => _userForAuthentication.Password)" />
-        </div>
-    </div>
+            <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
+                          @bind-Value="_userForAuthentication.Password" For="@(() => _userForAuthentication.Password)" InputType="InputType.Password" />
 
-    <div class="row">
-        <div class="col-md-12 text-right">
-            <button type="submit" class="btn btn-success">Login</button>
-        </div>
-    </div>
+        </MudCardContent>
+
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+            </MudCardActions>
+
+    </MudCard>
 </EditForm>

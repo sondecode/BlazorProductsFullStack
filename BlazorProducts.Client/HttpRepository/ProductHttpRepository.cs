@@ -64,9 +64,9 @@ namespace BlazorProducts.Client.HttpRepository
                 return imgUrl;
             }
         }
-        public async Task<Product> GetProduct(string id)
+        public async Task<Product> GetProduct(Guid id)
         {
-            var url = Path.Combine("products", id);
+            var url = Path.Combine("products", id.ToString());
             var response = await _client.GetAsync(url);
             var content = await response.Content.ReadAsStringAsync();
 

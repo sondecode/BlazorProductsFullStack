@@ -2,55 +2,37 @@
 using Entities.Models;
 using Entities.RequestFeatures;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace BlazorProducts.Client.Pages
 {
-	public partial class Products
-	{
-		public List<Product> ProductList { get; set; } = new List<Product>();
-		public MetaData MetaData { get; set; } = new MetaData();
-		private ProductParameters _productParameters = new ProductParameters();
-
-		[Inject]
-		public IProductHttpRepository ProductRepo { get; set; }
-
-		protected async override Task OnInitializedAsync()
-		{
-			await GetProducts();
-		}
-
-		private async Task SelectedPage(int page)
-		{
-			_productParameters.PageNumber = page;
-			await GetProducts();
-		}
-		private async Task GetProducts()
-		{
-			var pagingResponse = await ProductRepo.GetProducts(_productParameters);
-			ProductList = pagingResponse.Items;
-			MetaData = pagingResponse.MetaData;
-		}
-
-		private async Task SearchChanged(string searchTerm)
-		{
-			Console.WriteLine(searchTerm);
-			_productParameters.PageNumber = 1;
-			_productParameters.SearchTerm = searchTerm;
-			await GetProducts();
-		}
-
-		private async Task SortChanged(string orderBy)
-		{
-			Console.WriteLine(orderBy);
-			_productParameters.OrderBy = orderBy;
-			await GetProducts();
-		}
-
-        private async Task DeleteProduct(Guid id)
+    public partial class Products
+    {
+        private MudTable<Product> _table;
+        private ProductParameters _productParameters = new ProductParameters();
+        private readonly int[] _pageSizeOption = { 4, 6, 10 };
+        [Inject]
+        public IProductHttpRepository Repository { get; set; }
+        private async Task<TableData<Product>> GetServerData(TableState state)
         {
-			await ProductRepo.DeleteProduct(id.ToString());
-			_productParameters.PageNumber = 1;
-            await GetProducts();
+            _productParameters.PageSize = state.PageSize;
+            _productParameters.PageNumber = state.Page + 1;
+
+            _productParameters.OrderBy = state.SortDirection == SortDirection.Descending ?
+                state.SortLabel + " desc" :
+                state.SortLabel;
+
+            var response = await Repository.GetProducts(_productParameters);
+            return new TableData<Product>
+            {
+                Items = response.Items,
+                TotalItems = response.MetaData.TotalCount
+            };
+        }
+        private void OnSearch(string searchTerm)
+        {
+            _productParameters.SearchTerm = searchTerm;
+            _table.ReloadServerData();
         }
     }
 }

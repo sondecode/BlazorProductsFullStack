@@ -6,7 +6,7 @@ namespace BlazorProducts.Backend.Repository
 {
     public interface IOrderRepository
     {
-        Task<IEnumerable<Order>> GetOrders();
+        Task<PagedList<Order>> GetOrders(ProductParameters productParameters);
         Task CreateOrder(OrderForCreatingDto order);
         Task<Order> GetOrder(Guid orderId);
         Task UpdateStatus(Guid orderId, OrderStatus status);

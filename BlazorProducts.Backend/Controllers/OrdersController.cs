@@ -16,9 +16,10 @@ namespace BlazorProducts.Backend.Controllers
             _repo = repo;
         }
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] ProductParameters productParameters)
         {
-            var orders = await _repo.GetOrders();
+            var orders = await _repo.GetOrders(productParameters);
+            Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(orders.MetaData));
             return Ok(orders);
         }
         [HttpGet("{orderId}")]

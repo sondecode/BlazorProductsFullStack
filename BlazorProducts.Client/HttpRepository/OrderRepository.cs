@@ -18,16 +18,27 @@ namespace BlazorProducts.Client.HttpRepository
             _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true};
         }
 
-        public async Task<List<Order>> GetOrders()
+        public async Task<PagingResponse<Order>> GetOrders(ProductParameters productParameters)
         {
-            var response = await _client.GetAsync("orders");
+            var queryStringParam = new Dictionary<string, string>
+            {
+                ["pageSize"] = productParameters.PageSize.ToString(),
+                ["pageNumber"] = productParameters.PageNumber.ToString(),
+                ["searchTerm"] = productParameters.SearchTerm == null ? "" : productParameters.SearchTerm,
+                ["orderBy"] = productParameters.OrderBy
+            };
+            var response = await _client.GetAsync(QueryHelpers.AddQueryString("orders", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();
-            if(!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
                 throw new ApplicationException(content);
             }
-            var Items = JsonSerializer.Deserialize<List<Order>>(content, _options);
-            return Items;
+            var pagingResponse = new PagingResponse<Order>
+            {
+                Items = JsonSerializer.Deserialize<List<Order>>(content, _options),
+                MetaData = JsonSerializer.Deserialize<MetaData>(response.Headers.GetValues("X-Pagination").First(), _options)
+            };
+            return pagingResponse;
         }
 
         public async Task CreateOrder(OrderForCreatingDto order)

@@ -1,4 +1,5 @@
 ﻿using BlazorProducts.Backend.Paging;
+using BlazorProducts.Backend.Repository.RepoExtensions;
 using BlazorProducts.Server.Context;
 using Entities.Models;
 using Entities.RequestFeatures;
@@ -14,12 +15,14 @@ namespace BlazorProducts.Backend.Repository
         {
             _context = context;
         }
-        public async Task<IEnumerable<Order>> GetOrders()
+        public async Task<PagedList<Order>> GetOrders(ProductParameters productParameters)
         {
-            var orders = await _context.Orders.Include(o => o.OrderProducts).ThenInclude(op => op.Product)
+            var orders = await _context.Orders.Include(o => o.OrderProducts).ThenInclude(op => op.Product).Search(productParameters.SearchTerm)
+                .Sort(productParameters.OrderBy)
                 .ToListAsync();
 
-            return orders;
+            return PagedList<Order>
+                .ToPagedList(orders, productParameters.PageNumber, productParameters.PageSize);
         }
 
         public async Task CreateOrder(OrderForCreatingDto order)

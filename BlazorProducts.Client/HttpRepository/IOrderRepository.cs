@@ -7,7 +7,7 @@ namespace BlazorProducts.Client.HttpRepository
 {
     public interface IOrderRepository
     {
-        Task<List<Order>> GetOrders();
+        Task<PagingResponse<Order>> GetOrders(ProductParameters productParameters);
         Task CreateOrder(OrderForCreatingDto order);
         Task UpdateStatus(Guid orderId, int status);
     }

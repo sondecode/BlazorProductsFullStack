@@ -3,81 +3,78 @@
 @using BlazorProducts.Client.Component
 @using BlazorProducts.Client.Component.ProductTable
 @using Entities.Models
+@using Entities.RequestFeatures
 @using Microsoft.AspNetCore.Authorization
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
 
-<div class="row">
-    <div class="col-md-5">
-        <Search OnSearchChanged="() => {}" />
-    </div>
-    <div class="col-md-5">
-        <Sort OnSortChanged="() => {}" />
-    </div>
-    <div class="col-md-2">
-        <a href="/orders/createOrder">Create Order</a>
-    </div>
-</div>
-<div class="row">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>Customer Name</th>
-                <th>Products</th>
-                <th>Order Date</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Actions</th>
-                <!-- Add more table headers as needed -->
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var order in OrderList)
-            {
-                <tr data-toggle="collapse" data-target="#orderDetails-@order.Id" aria-expanded="false" aria-controls="orderDetails-@order.Id">
-                    <td>@order.Id</td>
-                    <td>@order.CustomerName</td>
-                    <td>
-                        <div>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Image</th>
-                                        <th>Product Name</th>
-                                        <th>Quantity</th>
-                                        <!-- Add more table headers as needed -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var orderProduct in order.OrderProducts)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <img src="@orderProduct.Product.ImageUrl" alt="product image" style="width:100px;" />
-                                            </td>
-                                            <td>@orderProduct.Product.Name</td>
-                                            <td>@orderProduct.Quantity</td>
-                                            <!-- Add more table cells for additional product details -->
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                    </td>
-                    <td>@order.OrderDate.ToShortDateString()</td>
-                    <td>@order.OrderTotal</td>
-                    <td>@order.Status</td>
-                    <td>
-                        <select id="orderStatus" class="mb-5" @onchange="(e) => UpdateOrderStatus(order,  (int)Enum.Parse<OrderStatus>(e.Value.ToString()))">
-                            @foreach (OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
-                            {
-                                <option value="@status">@status</option>
-                            }
-                        </select>
-                    </td>
-                    <!-- Add more table cells for additional order details -->
+
+<MudDataGrid ServerData="GetServerData" @ref="_dataGrid" T="Order" MultiSelection="false" SortMode="SortMode.Multiple" Filterable="true" Hideable="true">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Orders</MudText>
+        <MudIconButton Icon="@Icons.Material.Filled.Add"
+                       Color="Color.Default"
+                       Size="Size.Medium"
+                       @onclick="@(() => NavigationManager.NavigateTo("/orders/createOrder"))" />
+        <MudSpacer />
+        <MudTextField OnDebounceIntervalElapsed="OnSearch" Placeholder="Search" Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
+                      Class="mt-0" T="string" DebounceInterval="500"></MudTextField>
+    </ToolBarContent>
+    <Columns>
+
+        <HierarchyColumn T="Order" />
+        <TemplateColumn Title="ID">
+            <CellTemplate>
+                <MudStack Row>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@((e) => OpenOrderDetailDialog(context.Item.Id))">@context.Item.Id</MudButton>
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
+        <PropertyColumn Property="x => x.OrderTotal" Title="Total" />
+        <PropertyColumn Property="x => x.CustomerName" />
+        <PropertyColumn Property="x => x.Status" />
+        <TemplateColumn Filterable="false">
+            <CellTemplate>
+                <MudStack Row>
+                    <MudSelect T="OrderStatus" Label="Action" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter"
+                               Value="@context.Item.Status" ValueChanged="(e) => UpdateOrderStatus(context.Item, (int)Enum.Parse<OrderStatus>(e.ToString()))">
+                        @foreach (OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
+                        {
+                            <MudSelectItem Value="status" />
+                        }
+                    </MudSelect>
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+    <ChildRowContent>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <!-- Add more table headers as needed -->
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var orderProduct in context.Item.OrderProducts)
+                {
+                    <tr>
+                        <td>
+                            <img src="@orderProduct.Product.ImageUrl" alt="product image" style="width:100px;" />
+                        </td>
+                        <td>@orderProduct.Product.Name</td>
+                        <td>@orderProduct.Quantity</td>
+                        <!-- Add more table cells for additional product details -->
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </ChildRowContent>
+    <PagerContent>
+        <MudDataGridPager T="Order" PageSizeOptions="@_pageSizeOption" />
+    </PagerContent>
+
+</MudDataGrid>

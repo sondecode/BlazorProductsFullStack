@@ -1,0 +1,20 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudContainer>
+        <!-- Display order details here -->
+        <p>Order ID: 123</p>
+        <p>Customer Name: CustomerName</p>
+        <!-- Display other order details as needed -->
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Close">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] 
+    MudDialogInstance MudDialog { get; set; }
+
+    void Close() => MudDialog.Close(DialogResult.Ok(true));
+
+}

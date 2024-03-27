@@ -22,7 +22,7 @@ namespace BlazorProducts.Backend.Controllers
         public async Task<IActionResult> Get([FromQuery] ProductParameters productParameters)
         {
             var products = await _repo.GetProducts(productParameters);
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(products.MetaData));
+            Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(products.MetaData));
             return Ok(products);
         }
 
