@@ -62,6 +62,15 @@ namespace BlazorProducts.Backend.Repository
             item.Status = status;
             await _context.SaveChangesAsync();
         }
+        public async Task<Order> GetOrder(Guid orderId)
+        {
+            var item = await _context.Orders.Include(o => o.OrderProducts).ThenInclude(op => op.Product).FirstOrDefaultAsync(o => o.Id == orderId);
+            if (item == null)
+            {
+                throw new ArgumentException("Invalid order input");
+            }
+            return item;
+        }
 
     }
 }

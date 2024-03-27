@@ -21,6 +21,12 @@ namespace BlazorProducts.Backend.Controllers
             var orders = await _repo.GetOrders();
             return Ok(orders);
         }
+        [HttpGet("{orderId}")]
+        public async Task<IActionResult> GetOrder(Guid orderId)
+        {
+            var orders = await _repo.GetOrder(orderId);
+            return Ok(orders);
+        }
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] OrderForCreatingDto orderForCreating)
         {
