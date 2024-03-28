@@ -1,20 +1,31 @@
-﻿<MudDialog>
+﻿@using BlazorProducts.Client.Component.OrderProductTable
+<MudDialog>
     <DialogContent>
         <MudContainer>
-        <!-- Display order details here -->
-        <p>Order ID: 123</p>
-        <p>Customer Name: CustomerName</p>
-        <!-- Display other order details as needed -->
+            @if (OrderData != null)
+            {
+                <div>
+                    <p><strong>Order ID:</strong> @OrderData.Id</p>
+                    <p><strong>Status:</strong> @OrderData.Status</p>
+                    <p><strong>Customer Name:</strong> @OrderData.CustomerName</p>
+                    <p><strong>Order Date:</strong> @OrderData.OrderDate</p>
+                    <OrderProductTable OrderProducts="@OrderData.OrderProducts" />
+                    <p>
+                        <strong>Export:</strong> <MudIconButton Icon="@Icons.Material.Filled.Download"
+                                                                Color="Color.Default"
+                                                                Size="Size.Medium"
+                                                                @onclick="@(() => {})" />
+                    </p>
+                    <!-- Add more order details as needed -->
+                </div>
+            }
+            else
+            {
+                <p>Loading...</p>
+            }
         </MudContainer>
     </DialogContent>
     <DialogActions>
         <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Close">Close</MudButton>
     </DialogActions>
 </MudDialog>
-@code {
-    [CascadingParameter] 
-    MudDialogInstance MudDialog { get; set; }
-
-    void Close() => MudDialog.Close(DialogResult.Ok(true));
-
-}

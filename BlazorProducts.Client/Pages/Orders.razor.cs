@@ -41,9 +41,11 @@ namespace BlazorProducts.Client.Pages
             order.Status = (OrderStatus)newStatus;
             await OrderRepo.UpdateStatus(order.Id, newStatus);
         }
-        private void OpenOrderDetailDialog(Guid id)
+        private void OpenOrderDetailDialog(Guid orderId)
         {
-            DialogService.Show<OrderDetail>("Options Dialog", new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true });
+            var parameters = new DialogParameters<OrderDetail>();
+            parameters.Add(x => x.OrderId, orderId);
+            DialogService.Show<OrderDetail>("Order Detail", parameters, new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true });
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@page "/orders"
 @attribute [Authorize(Roles = "Administrator")]
 @using BlazorProducts.Client.Component
+@using BlazorProducts.Client.Component.OrderProductTable
 @using BlazorProducts.Client.Component.ProductTable
 @using Entities.Models
 @using Entities.RequestFeatures
@@ -31,7 +32,7 @@
                 </MudStack>
             </CellTemplate>
         </TemplateColumn>
-        <PropertyColumn Property="x => x.OrderTotal" Title="Total" />
+        <PropertyColumn Property="x => x.OrderDate" Title="Date" />
         <PropertyColumn Property="x => x.CustomerName" />
         <PropertyColumn Property="x => x.Status" />
         <TemplateColumn Filterable="false">
@@ -49,29 +50,7 @@
         </TemplateColumn>
     </Columns>
     <ChildRowContent>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Product Name</th>
-                    <th>Quantity</th>
-                    <!-- Add more table headers as needed -->
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var orderProduct in context.Item.OrderProducts)
-                {
-                    <tr>
-                        <td>
-                            <img src="@orderProduct.Product.ImageUrl" alt="product image" style="width:100px;" />
-                        </td>
-                        <td>@orderProduct.Product.Name</td>
-                        <td>@orderProduct.Quantity</td>
-                        <!-- Add more table cells for additional product details -->
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <OrderProductTable OrderProducts="@context.Item.OrderProducts" />
     </ChildRowContent>
     <PagerContent>
         <MudDataGridPager T="Order" PageSizeOptions="@_pageSizeOption" />

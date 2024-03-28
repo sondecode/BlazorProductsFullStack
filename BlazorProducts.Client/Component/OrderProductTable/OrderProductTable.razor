@@ -1,0 +1,43 @@
+﻿@using Entities.Models
+<table class="table">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+            <!-- Add more table headers as needed -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var orderProduct in OrderProducts)
+        {
+            double total = orderProduct.Product.Price * @orderProduct.Quantity;
+            TotalFooter += total;
+            <tr>
+                <td>
+                    <img src="@orderProduct.Product.ImageUrl" alt="product image" style="width:100px;" />
+                </td>
+                <td>@orderProduct.Product.Name</td>
+                <td>@orderProduct.Quantity</td>
+                <td>@orderProduct.Product.Price</td>
+                <td>@total</td>
+                <!-- Add more table cells for additional product details -->
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <!-- Table foot (sums, totals, etc.) -->
+        <tr>
+            <td colspan="4">Total:</td>
+            <td>@TotalFooter</td> <!-- Example value; replace with actual sum -->
+        </tr>
+    </tfoot>
+</table>
+
+@code{
+    [Parameter]
+    public ICollection<OrderProduct> OrderProducts {get; set;}
+    public double TotalFooter { get; set; }
+}

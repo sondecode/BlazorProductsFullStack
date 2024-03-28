@@ -41,6 +41,21 @@ namespace BlazorProducts.Client.HttpRepository
             return pagingResponse;
         }
 
+        public async Task<Order> GetOrder(Guid OrderId)
+        {
+            var url = Path.Combine("Orders", OrderId.ToString());
+            var response = await _client.GetAsync(url);
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApplicationException(content);
+            }
+
+            var order = JsonSerializer.Deserialize<Order>(content, _options);
+            return order;
+        }
+
         public async Task CreateOrder(OrderForCreatingDto order)
         {
             var content = JsonSerializer.Serialize(order);
