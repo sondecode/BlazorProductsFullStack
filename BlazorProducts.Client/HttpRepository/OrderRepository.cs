@@ -76,5 +76,18 @@ namespace BlazorProducts.Client.HttpRepository
                 throw new ApplicationException(content);
             }
         }
+        public async Task<Order> UpdateOrder(Guid orderId, OrderForCreatingDto order)
+        {
+            var content = JsonSerializer.Serialize(order);
+            var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
+
+            var postResult = await _client.PutAsync($"orders/{orderId}", bodyContent);
+            var postContent = await postResult.Content.ReadAsStringAsync();
+
+            if (!postResult.IsSuccessStatusCode) { throw new ApplicationException(postContent); }
+
+            var NewOrder = JsonSerializer.Deserialize<Order>(postContent, _options);
+            return NewOrder;
+        }
     }
 }

@@ -1,31 +1,48 @@
-﻿@using BlazorProducts.Client.Component.OrderProductTable
+﻿@using BlazorProducts.Client.Component.OrderTable
 <MudDialog>
     <DialogContent>
-        <MudContainer>
-            @if (OrderData != null)
+        @if (IsEditing)
+        {
+            <UpdateOrderTable OrderData="@OrderData" updatedCallback="@Updated" />
+        }
+        else
+        {
+            <MudContainer>
+                @if (OrderData != null)
+                {
+                    <div>
+                        <p><strong>Order ID:</strong> @OrderData.Id</p>
+                        <p><strong>Status:</strong> @OrderData.Status</p>
+                        <p><strong>Customer Name:</strong> @OrderData.CustomerName</p>
+                        <p><strong>Order Date:</strong> @OrderData.OrderDate</p>
+                        <OrderProductTable OrderProducts="@OrderData.OrderProducts" />
+                        <p>
+                            <strong>Export:</strong> <MudIconButton Icon="@Icons.Material.Filled.Download"
+                                                                    Color="Color.Default"
+                                                                    Size="Size.Medium"
+                                                                    @onclick="@(() => {})" />
+                        </p>
+                        <!-- Add more order details as needed -->
+                    </div>
+                }
+                else
+                {
+                    <p>Loading...</p>
+                }
+            </MudContainer>
+        }
+        
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Edit">
+            @if (IsEditing)
             {
-                <div>
-                    <p><strong>Order ID:</strong> @OrderData.Id</p>
-                    <p><strong>Status:</strong> @OrderData.Status</p>
-                    <p><strong>Customer Name:</strong> @OrderData.CustomerName</p>
-                    <p><strong>Order Date:</strong> @OrderData.OrderDate</p>
-                    <OrderProductTable OrderProducts="@OrderData.OrderProducts" />
-                    <p>
-                        <strong>Export:</strong> <MudIconButton Icon="@Icons.Material.Filled.Download"
-                                                                Color="Color.Default"
-                                                                Size="Size.Medium"
-                                                                @onclick="@(() => {})" />
-                    </p>
-                    <!-- Add more order details as needed -->
-                </div>
+                <span>Cancel</span>
             }
             else
             {
-                <p>Loading...</p>
+                <span>Edit</span>
             }
-        </MudContainer>
-    </DialogContent>
-    <DialogActions>
-        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Close">Close</MudButton>
+            </MudButton>
     </DialogActions>
 </MudDialog>

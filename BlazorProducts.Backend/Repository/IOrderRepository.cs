@@ -9,6 +9,7 @@ namespace BlazorProducts.Backend.Repository
         Task<PagedList<Order>> GetOrders(ProductParameters productParameters);
         Task CreateOrder(OrderForCreatingDto order);
         Task<Order> GetOrder(Guid orderId);
+        Task<Order> UpdateOrder(Guid orderId, OrderForCreatingDto order);
         Task UpdateStatus(Guid orderId, OrderStatus status);
     }
 }

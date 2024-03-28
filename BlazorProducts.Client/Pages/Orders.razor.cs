@@ -45,7 +45,7 @@ namespace BlazorProducts.Client.Pages
         {
             var parameters = new DialogParameters<OrderDetail>();
             parameters.Add(x => x.OrderId, orderId);
-            DialogService.Show<OrderDetail>("Order Detail", parameters, new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true });
+            DialogService.Show<OrderDetail>("Order Detail", parameters, new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseButton = true });
         }
     }
 }

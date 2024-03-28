@@ -28,6 +28,12 @@ namespace BlazorProducts.Backend.Controllers
             var orders = await _repo.GetOrder(orderId);
             return Ok(orders);
         }
+        [HttpPut("{orderId}")]
+        public async Task<IActionResult> UpdateOrder(Guid orderId, [FromBody] OrderForCreatingDto orderForCreating)
+        {
+            var orders = await _repo.UpdateOrder(orderId, orderForCreating);
+            return Ok(orders);
+        }
         [HttpPost]
         public async Task<IActionResult> CreateOrder([FromBody] OrderForCreatingDto orderForCreating)
         {

@@ -10,6 +10,7 @@ namespace BlazorProducts.Client.HttpRepository
         Task<PagingResponse<Order>> GetOrders(ProductParameters productParameters);
         Task<Order> GetOrder(Guid OrderId);
         Task CreateOrder(OrderForCreatingDto order);
+        Task<Order> UpdateOrder(Guid orderId, OrderForCreatingDto order);
         Task UpdateStatus(Guid orderId, int status);
     }
 }
