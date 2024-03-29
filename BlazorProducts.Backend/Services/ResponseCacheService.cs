@@ -20,7 +20,7 @@ namespace BlazorProducts.Backend.Repository
 
         public async Task<string> GetCachedResponseAsync(string cacheKey)
         {
-            var cacheResponse = await _distributedCache.GetStringAsync(cacheKey);
+            var cacheResponse = await _distributedCache.GetStringAsync(cacheKey.ToLower());
             return string.IsNullOrWhiteSpace(cacheResponse) ? null : cacheResponse;
 
         }
@@ -57,7 +57,7 @@ namespace BlazorProducts.Backend.Repository
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             });
-            await _distributedCache.SetStringAsync(cacheKey, serializerResponse, new DistributedCacheEntryOptions()
+            await _distributedCache.SetStringAsync(cacheKey.ToLower(), serializerResponse, new DistributedCacheEntryOptions()
             {
                 AbsoluteExpirationRelativeToNow = timeOut
             });

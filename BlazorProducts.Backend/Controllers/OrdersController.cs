@@ -48,7 +48,7 @@ namespace BlazorProducts.Backend.Controllers
             {
                 return BadRequest();
             }
-            await _responseCacheService.RemoveCacheResponseAsync($"/orducts");
+            await _responseCacheService.RemoveCacheResponseAsync($"/orders");
             await _repo.CreateOrder(orderForCreating);
             return Created("", orderForCreating);
         }
