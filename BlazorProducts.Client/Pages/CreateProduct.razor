@@ -1,44 +1,25 @@
 ﻿@page "/products/createProduct"
+@using BlazorProducts.Client.Component
 @using BlazorProducts.Client.Shared
 
-<h2>Create Product Form</h2>
-<SuccessNotification @ref="_notification"/>
-<EditForm Model="_product" OnSubmit="Create" class="card card-body bg-light mt-5">
-    <DataAnnotationsValidator />
-    <div class="mb-3 row">
-        <label for="name" class="col-md-2 col-form-label">Name:</label>
-        <div class="col-md-10">
-            <InputText id="name" class="form-control" @bind-Value="_product.Name" />
-            <ValidationMessage For="@(() => _product.Name)" />
-        </div>
-    </div>
-
-    <div class="mb-3 row">
-        <label for="supplier" class="col-md-2 col-form-label">Supplier:</label>
-        <div class="col-md-10">
-            <InputText id="supplier" class="form-control" @bind-Value="_product.Supplier" />
-            <ValidationMessage For="@(() => _product.Supplier)" />
-        </div>
-    </div>
-
-    <div class="mb-3 row">
-        <label for="price" class="col-md-2 col-form-label">Price:</label>
-        <div class="col-md-10">
-            <InputNumber id="price" class="form-control" @bind-Value="_product.Price" />
-            <ValidationMessage For="@(() => _product.Price)" />
-        </div>
-    </div>
-
-    <div class="mb-3 row">
-        <label for="image" class="col-md-2 col-form-label">Image:</label>
-        <div class="col-md-10">
-            <ImageUpload OnChange="AssignImageUrl" />
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12 text-right">
-            <button type="submit" class="btn btn-success">Create</button>
-        </div>
-    </div>
-</EditForm>
+<section style="width:600px; margin: 0 auto;">
+    <EditForm Model="_product" OnValidSubmit="Create">
+        <DataAnnotationsValidator />
+        <MudCard>
+            <MudCardContent>
+                <MudTextField Label="Product Name" @bind-Value="_product.Name"
+                              For="@(() => _product.Name)" />
+                <MudTextField Label="Supplier" @bind-Value="_product.Supplier"
+                              For="@(() => _product.Supplier)" />
+                <MudTextField Label="Price" @bind-Value="_product.Price" HelperText="Between 5 and 1000"
+                              Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney"
+                              InputType="InputType.Number" For="@(() => _product.Price)" />
+                <ImageUpload OnChange="SetImgUrl" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary"
+                           Class="ml-auto">Create Product</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </EditForm>
+</section>

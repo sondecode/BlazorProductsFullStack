@@ -1,4 +1,5 @@
 ﻿using BlazorProducts.Backend.Repository;
+using BlazorProducts.Server.Context.Configuration;
 using Entities.Models;
 using Entities.RequestFeatures;
 using Microsoft.AspNetCore.Authorization;
@@ -12,13 +13,16 @@ namespace BlazorProducts.Backend.Controllers
     
     public class ProductsController : ControllerBase
     {
+        private IResponseCacheService _responseCacheService;
         private readonly IProductRepository _repo;
-        public ProductsController(IProductRepository repo)
+        public ProductsController(IProductRepository repo, IResponseCacheService responseCacheService)
         {
             _repo = repo;
+            _responseCacheService = responseCacheService;
         }
         [HttpGet]
         [Authorize]
+        [Cache(1000, true)]
         public async Task<IActionResult> Get([FromQuery] ProductParameters productParameters)
         {
             var products = await _repo.GetProducts(productParameters);
@@ -33,12 +37,13 @@ namespace BlazorProducts.Backend.Controllers
             {
                 return BadRequest();
             }
-
+            await _responseCacheService.RemoveCacheResponseAsync("/Products");
             await _repo.CreateProduct(product);
             return Created("", product);
         }
 
         [HttpGet("{id}")]
+        [Cache(1000)]
         public async Task<IActionResult> GetProduct(Guid id)
         {
             var product = await _repo.GetProduct(id);
@@ -56,6 +61,7 @@ namespace BlazorProducts.Backend.Controllers
                 return NotFound();
             }
 
+            await _responseCacheService.RemoveCacheResponseAsync($"/Products/{id}");
             await _repo.UpdateProduct(product, dbProduct);
             return NoContent();
         }
@@ -69,6 +75,7 @@ namespace BlazorProducts.Backend.Controllers
             {
                 return NotFound();
             }
+            await _responseCacheService.RemoveCacheResponseAsync($"/Products/{id}");
             await _repo.DeleteProduct(dbProduct);
            
             return NoContent();

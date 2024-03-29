@@ -1,4 +1,5 @@
 ﻿using BlazorProducts.Backend.Repository;
+using BlazorProducts.Server.Context.Configuration;
 using Entities.Models;
 using Entities.RequestFeatures;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +11,16 @@ namespace BlazorProducts.Backend.Controllers
     [Route("[controller]")]
     public class OrdersController : ControllerBase
     {
+        private IResponseCacheService _responseCacheService;
         private readonly IOrderRepository _repo;
-        public OrdersController (IOrderRepository repo)
+        public OrdersController (IOrderRepository repo, IResponseCacheService responseCacheService)
         {
             _repo = repo;
+            _responseCacheService = responseCacheService;
         }
         [HttpGet]
+
+        [Cache(1000, true)]
         public async Task<IActionResult> Get([FromQuery] ProductParameters productParameters)
         {
             var orders = await _repo.GetOrders(productParameters);
@@ -23,6 +28,7 @@ namespace BlazorProducts.Backend.Controllers
             return Ok(orders);
         }
         [HttpGet("{orderId}")]
+        [Cache(1000)]
         public async Task<IActionResult> GetOrder(Guid orderId)
         {
             var orders = await _repo.GetOrder(orderId);
@@ -32,6 +38,7 @@ namespace BlazorProducts.Backend.Controllers
         public async Task<IActionResult> UpdateOrder(Guid orderId, [FromBody] OrderForCreatingDto orderForCreating)
         {
             var orders = await _repo.UpdateOrder(orderId, orderForCreating);
+            await _responseCacheService.RemoveCacheResponseAsync($"/orders/{orderId}");
             return Ok(orders);
         }
         [HttpPost]
@@ -41,13 +48,14 @@ namespace BlazorProducts.Backend.Controllers
             {
                 return BadRequest();
             }
-
+            await _responseCacheService.RemoveCacheResponseAsync($"/orducts");
             await _repo.CreateOrder(orderForCreating);
             return Created("", orderForCreating);
         }
         [HttpGet("{orderId}/ChangeStatus/{status}")]
         public async Task<IActionResult> UpdateStatus(Guid orderId, OrderStatus status)
         {
+            await _responseCacheService.RemoveCacheResponseAsync($"/orders/{orderId}");
             await _repo.UpdateStatus(orderId, status);
             return Ok();
         }

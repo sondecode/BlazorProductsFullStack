@@ -2,10 +2,17 @@
 <AuthorizeView>
     <Authorized>
         Hello, @context.User.Identity.Name!
-        <MudLink Color="@Color.Default" Href="/Logout" Match="NavLinkMatch.Prefix">Log out</MudLink>
+        <MudPaper Class="pa-4 mr-1 mud-theme-primary">
+        <MudLink Style="color: white !important" Href="/Logout" Match="NavLinkMatch.Prefix">Log out</MudLink>
+        </MudPaper>
     </Authorized>
     <NotAuthorized>
-        <MudLink Color="@Color.Default" Href="/Registration" Match="NavLinkMatch.Prefix">Register </MudLink>
-        <MudLink Color="@Color.Default" Href="/Login" Match="NavLinkMatch.Prefix">Log in</MudLink>
+        <MudPaper Class="pa-4 mr-5 mud-theme-primary">
+        <MudLink Style="color: white !important" Href="/Registration" Match="NavLinkMatch.Prefix">Register </MudLink>
+        </MudPaper>
+        
+        <MudPaper Class="pa-4 mr-1 mud-theme-primary">
+        <MudLink Style="color: white !important" Href="/Login" Match="NavLinkMatch.Prefix">Log in</MudLink>
+        </MudPaper>
     </NotAuthorized>
 </AuthorizeView>

@@ -1,12 +1,14 @@
 using System.Text;
 using BlazorProducts.Backend.Repository;
 using BlazorProducts.Server.Context;
+using BlazorProducts.Server.Context.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 //Enable CORS
@@ -23,6 +25,16 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.AddDbContext<ProductContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
 builder.Services.AddControllers();
+var redisConfiguration = new RedisConfiguration();
+builder.Configuration.GetSection("RedisConfiguration").Bind(redisConfiguration);
+builder.Services.AddSingleton(redisConfiguration);
+
+if (redisConfiguration.Enabled)
+{
+    builder.Services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(redisConfiguration.RedisConnectionString));
+    builder.Services.AddStackExchangeRedisCache(option => option.Configuration = redisConfiguration.RedisConnectionString);
+    builder.Services.AddSingleton<IResponseCacheService, ResponseCacheService>();
+}
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderProductRepository, OrderProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();

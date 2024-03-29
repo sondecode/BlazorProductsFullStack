@@ -1,0 +1,44 @@
+﻿@using BlazorProducts.Client.HttpRepository
+@using System.Net.Http.Headers
+<InputFile id="fileInput" OnChange="UploadImage" hidden />
+<MudButton HtmlTag="label" Variant="Variant.Filled"
+           Color="Color.Primary" StartIcon="@Icons.Filled.CloudUpload"
+           Class="my-3" for="fileInput">
+    Upload Image
+</MudButton>
+@if (ImgUrl != null)
+{
+    <div>
+        <img src="@ImgUrl" style="width:300px" />
+    </div>
+}
+
+@code{
+    [Inject]
+    public ISnackbar Snackbar { get; set; }
+    public string ImgUrl { get; set; }
+    [Parameter]
+    public EventCallback<string> OnChange { get; set; }
+    [Inject]
+    public IProductHttpRepository Repository { get; set; }
+    private async Task UploadImage(InputFileChangeEventArgs e)
+    {
+        var imageFiles = e.GetMultipleFiles();
+        foreach (var imageFile in imageFiles)
+        {
+            if (imageFile != null)
+            {
+                var resizedFile = await imageFile.RequestImageFileAsync("image/png", 300, 500);
+                using (var ms = resizedFile.OpenReadStream(resizedFile.Size))
+                {
+                    var content = new MultipartFormDataContent();
+                    content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+                    content.Add(new StreamContent(ms, Convert.ToInt32(resizedFile.Size)), "image", imageFile.Name);
+                    ImgUrl = await Repository.UploadProductImage(content);
+                    await OnChange.InvokeAsync(ImgUrl);
+                }
+            }
+        }
+        Snackbar.Add("Image uploaded successfully.", Severity.Info);
+    }
+}
